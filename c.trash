@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C.TRASH – Monitoramento Hospitalar</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-weight: 700;
+    }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #ffffff 0%, #f2f2f7 40%, #dcdce0 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #1c1c1e;
+    }
+    .container {
+      background: linear-gradient(180deg, #ffffff 0%, #f4f4f6 60%, #ededf0 100%);
+      width: 100%;
+      max-width: 420px;
+      padding: 24px;
+      border-radius: 24px;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+      border: 1px solid #c7c7cc;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 6px;
+      letter-spacing: 1.5px;
+      color: #0a84ff;
+      font-weight: 800;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 13px;
+      margin-bottom: 22px;
+      color: #6e6e73;
+    }
+    .status {
+      text-align: center;
+      margin-bottom: 18px;
+      padding: 10px;
+      border-radius: 14px;
+      font-weight: 500;
+      background: #f2f2f7;
+      border: 1px solid #e5e5ea;
+      color: #1c1c1e;
+    }
+    .bin {
+      width: 130px;
+      height: 190px;
+      border: 2px solid #d1d1d6;
+      border-radius: 0 0 16px 16px;
+      margin: 0 auto 22px;
+      position: relative;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .lid {
+      position: absolute;
+      top: -34px;
+      left: -12px;
+      width: 154px;
+      height: 34px;
+      background: #d1d1d6;
+      border-radius: 16px 16px 0 0;
+      transition: transform 0.5s;
+    }
+    .lid.open {
+      transform: rotate(-22deg) translate(-20px, -10px);
+    }
+    .trash-level {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: linear-gradient(to top, #34c759, #30d158);
+      transition: height 1s, background 1s;
+    }
+    .info {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #3a3a3c;
+    }
+    @media (min-width: 768px) {
+      .container { max-width: 600px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>C.TRASH</h1>
+    <div class="subtitle">Monitoramento Hospitalar de Resíduos</div>
+
+    <div class="status" id="statusText">Status: Sistema Operacional</div>
+
+    <div class="bin">
+      <div class="lid" id="lid"></div>
+      <div class="trash-level" id="trash"></div>
+    </div>
+
+    <div class="info">
+      <span>Volume: <strong id="volume">0%</strong></span>
+      <span>Tampa: <strong id="lidStatus">Fechada</strong></span>
+    </div>
+  </div>
+
+  <script>
+    let volume = 0;
+    let lidOpen = false;
+
+    const trash = document.getElementById('trash');
+    const volumeText = document.getElementById('volume');
+    const lid = document.getElementById('lid');
+    const lidStatus = document.getElementById('lidStatus');
+    const statusText = document.getElementById('statusText');
+
+    function updateUI() {
+      trash.style.height = volume + '%';
+      volumeText.textContent = volume + '%';
+
+      if (volume >= 80) {
+        trash.style.background = 'linear-gradient(to top, #922b21, #e74c3c)';
+        statusText.textContent = 'Status: Lixeira Cheia – Risco Biológico';
+      } else {
+        trash.style.background = 'linear-gradient(to top, #1abc9c, #2ecc71)';
+        statusText.textContent = 'Status: Sistema Operacional';
+      }
+
+      if (lidOpen) {
+        lid.classList.add('open');
+        lidStatus.textContent = 'Aberta';
+      } else {
+        lid.classList.remove('open');
+        lidStatus.textContent = 'Fechada';
+      }
+    }
+
+    // Simulação em tempo real (ilustrativa)
+    setInterval(() => {
+      volume += Math.floor(Math.random() * 12);
+      if (volume > 100) volume = 0;
+
+      lidOpen = Math.random() > 0.5;
+      updateUI();
+    }, 3000);
+
+    updateUI();
+  </script>
+</body>
+</html>
